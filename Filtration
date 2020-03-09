@@ -12,14 +12,25 @@ def Equiter(df):
            if (row['Yr2Rev']<row['Yr3Rev']) and (row['Liquidity_R']>=1) and (row['Profit']>=0.4):
                if (row['Avg_COGS_R']<=0.3):
                    df.at[i,'Investment'] = 1
+                   
                else:
                    df.at[i,'Investment'] = 0
            else:
                df.at[i,'Investment'] = 0
        else:
            df.at[i,'Investment'] = 0
-       
+    
+   Yar(df)
 
+def Yar(df):
+    for i, row in df.iterrows():
+        if (row['Investment']==1):
+            df.at[i,'YrsToAcq']=np.random.randint(1,15)
+        else:
+            df.at[i,'YrsToAcq']=0
+            
+    print(df.head(50))
+    df.to_csv(r'/Users/maxwellkeeter/Desktop/CompSci Resources/Python/PE Class/PEAcq.csv')
 
 Equiter(df)
 
