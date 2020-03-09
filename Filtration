@@ -1,0 +1,34 @@
+
+
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+
+df=pd.read_csv('/Users/maxwellkeeter/Desktop/CompSci Resources/Python/PE Class/PE.csv')
+
+def Equiter(df):
+   for i, row in df.iterrows(): 
+       if ((row['Owner_Equity']>0.5) and (row['Yr1Rev']< row['Yr2Rev'])):
+           if (row['Yr2Rev']<row['Yr3Rev']) and (row['Liquidity_R']>=1) and (row['Profit']>=0.4):
+               if (row['Avg_COGS_R']<=0.3):
+                   df.at[i,'Investment'] = 1
+               else:
+                   df.at[i,'Investment'] = 0
+           else:
+               df.at[i,'Investment'] = 0
+       else:
+           df.at[i,'Investment'] = 0
+       
+
+
+Equiter(df)
+
+
+#df.to_csv(r'/Users/maxwellkeeter/Desktop/CompSci Resources/Python/PE Class/PEInv.csv')
+
+
+print('0: Do not invest, 1: Consider investing\n')
+Inv_Count=df['Investment'].value_counts()
+
+print(Inv_Count)
+print(Inv_Count.plot.pie(subplots=True, autopct='%.2f'))
