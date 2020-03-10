@@ -1,5 +1,4 @@
 
-
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -9,8 +8,8 @@ df=pd.read_csv('/Users/maxwellkeeter/Desktop/CompSci Resources/Python/PE Class/P
 def Equiter(df):
    for i, row in df.iterrows(): 
        if ((row['Owner_Equity']>0.5) and (row['Yr1Rev']< row['Yr2Rev'])):
-           if (row['Yr2Rev']<row['Yr3Rev']) and (row['Liquidity_R']>=1) and (row['Profit']>=0.4):
-               if (row['Avg_COGS_R']<=0.3):
+           if (row['Yr2Rev']<row['Yr3Rev']) and (row['Liquidity_R']>=1) and (row['Profit']>=0.3):
+               if (row['Avg_COGS_R']<=0.5):
                    df.at[i,'Investment'] = 1
                    
                else:
@@ -21,11 +20,14 @@ def Equiter(df):
            df.at[i,'Investment'] = 0
     
    Yar(df)
+   print(df.head(50))
 
 def Yar(df):
     for i, row in df.iterrows():
         if (row['Investment']==1):
-            df.at[i,'YrsToAcq']=np.random.randint(1,15)
+            
+            df['YrsToAcq'] = df.apply(lambda x: ((x['Yr3Rev']*0.0000008)+(x['Liquidity_R']*0.5)+(x['Profit']*0.5)), axis=1)
+            df.at[i,'YrsToAcq']=((row['Yr3Rev']*0.0000008)+(row['Liquidity_R']*0.5)+(row['Profit']*0.5))
         else:
             df.at[i,'YrsToAcq']=0
             
@@ -35,7 +37,7 @@ def Yar(df):
 Equiter(df)
 
 
-#df.to_csv(r'/Users/maxwellkeeter/Desktop/CompSci Resources/Python/PE Class/PEInv.csv')
+
 
 
 print('0: Do not invest, 1: Consider investing\n')
