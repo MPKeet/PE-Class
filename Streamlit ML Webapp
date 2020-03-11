@@ -1,0 +1,74 @@
+
+
+import pandas as pd
+import numpy as np
+import streamlit as st
+from sklearn import linear_model
+import altair as alt
+
+
+@st.cache
+
+
+
+def get_data():
+    
+    csv=(r'/Users/maxwellkeeter/Desktop/CompSci Resources/Python/PE Class/AcqSet.csv')
+    return pd.read_csv(csv)
+
+df=get_data()    
+
+st.title("Fundamentals to Acquisition Prediction")
+st.markdown("Welcome to a proof of concept for predicting the acquisition timeframe for a given company. Once applied to an existing investment database, this would be useful in predicting the timeframe expected on an investment\n \n**Note: All values are randomized and for example only**")
+st.header("A Sample of the Data:")
+
+
+#Visualization of Data
+st.dataframe(df.head(50))
+st.markdown('If you scroll to the right, you will see an investment column, this is a dataset of all fundamentally strong investments which is noted by a 1 in the investment section, all 0 investment rows were excluded.')
+
+
+def accept_user_data():
+    
+    Yr3Rev = (st.number_input("Enter the Year 3 Revenue: "))
+    Liquidity_R = (st.number_input("Enter the Liquidity Ratio (must be greater than 1): "))
+    Profit = (st.number_input("Enter the Profit Ratio: "))
+    try:
+        NYr3Rev=float(Yr3Rev)
+        NLiquidity_R=float(Liquidity_R)
+        NProfit=float(Profit)
+    except ValueError:
+        pass
+    train(NYr3Rev,NLiquidity_R, NProfit)
+    
+    
+   
+
+@st.cache(suppress_st_warning=True)
+def train(NYr3Rev,NLiquidity_R, NProfit):
+    df=pd.read_csv(r'/Users/maxwellkeeter/Desktop/CompSci Resources/Python/PE Class/AcqSet.csv')
+    
+    
+    
+    
+    X=df[['Yr3Rev','Liquidity_R', 'Profit']]
+    Y=df['YrsToAcq']
+    
+    regr=linear_model.LinearRegression()
+    regr.fit(X,Y)
+#    print('Intercept: \n',regr.intercept_)
+#    print('Coefficients: \n',regr.coef_)
+    
+    prediction=regr.predict([[NYr3Rev, NLiquidity_R, NProfit]])
+    
+    st.markdown("The Predicted time until acquisition is: {} Years ".format(prediction))
+    st.markdown("Prediction reached through using sklearn and multivariate regression analysis")
+    st.header("Visualization of the data:")
+    
+    plot=alt.Chart(df).mark_circle().encode(
+            x='Liquidity_R',y='Profit',size='Yr3Rev', color='Yr3Rev')
+    
+    st.write(plot)
+
+  
+accept_user_data()
