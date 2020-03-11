@@ -15,3 +15,5 @@ Lastly, a gross profit margin was created from revenue information and COGS
 
 
 After this database was created, a simple filtering system was applied only allowing for the following investment criteria: Founder Equity: Greater than 50%, Year 1 Revenue<Year 2 Revenue<Year 3 Revenue, a Liquidity Ratio greater than or equal to 1 and an average COGS ratio of less than or equal to 30%.
+
+After the filtered investments were added into a new database, sklearn was used to derive a projected timeline until acquisition of the company. 
